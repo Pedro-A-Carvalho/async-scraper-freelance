@@ -1,30 +1,40 @@
 import aiohttp
 import asyncio
 from scraper.parser import parse_title
+import random
 
 DEFAULT_TIMEOUT = 10
 
 
 async def fetch(session: aiohttp.ClientSession, url: str, semaphore: asyncio.Semaphore):
+    max_retries = 3
+    base_delay = 1
+
     async with semaphore:
-        try:
-            async with session.get(url, timeout=DEFAULT_TIMEOUT) as response:
-                response.raise_for_status()
-                html = await response.text()
+        for attempt in range(1, max_retries + 1):
+            try:
+                async with session.get(url, timeout=DEFAULT_TIMEOUT) as response:
+                    response.raise_for_status()
+                    html = await response.text()
 
-                parsed_data = parse_title(html)
+                    parsed_data = parse_title(html)
 
-                print(f"[SUCCESS] {url}")
+                    print(f"[SUCCESS] {url}")
+                    return {
+                        "url": url,
+                        "data": parsed_data
+                    }
 
-                return {
-                    "url": url,
-                    "data": parsed_data
-                }
+            except (asyncio.TimeoutError, aiohttp.ClientError) as e:
+                print(f"[RETRY {attempt}] {url} -> {e}")
 
-        except asyncio.TimeoutError:
-            print(f"[TIMEOUT] {url}")
-            return {"url": url, "error": "timeout"}
+                if attempt == max_retries:
+                    print(f"[FAILED] {url}")
+                    return {
+                        "url": url,
+                        "error": str(e)
+                    }
 
-        except aiohttp.ClientError as e:
-            print(f"[ERROR] {url} -> {e}")
-            return {"url": url, "error": str(e)}
+                delay = base_delay * (2 ** (attempt - 1))
+                jitter = random.uniform(0, 0.5)
+                await asyncio.sleep(delay + jitter)
