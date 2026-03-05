@@ -1,6 +1,16 @@
 import asyncio
 import aiohttp
 from scraper.fetcher import fetch
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler("scraper.log"),
+        logging.StreamHandler()
+    ]
+)
 
 URLS = [
     "https://example.com",

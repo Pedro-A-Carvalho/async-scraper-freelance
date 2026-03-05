@@ -2,6 +2,9 @@ import aiohttp
 import asyncio
 from scraper.parser import parse_title
 import random
+import logging
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_TIMEOUT = 10
 
@@ -19,17 +22,17 @@ async def fetch(session: aiohttp.ClientSession, url: str, semaphore: asyncio.Sem
 
                     parsed_data = parse_title(html)
 
-                    print(f"[SUCCESS] {url}")
+                    logger.info(f"SUCCESS: {url}")
                     return {
                         "url": url,
                         "data": parsed_data
                     }
 
             except (asyncio.TimeoutError, aiohttp.ClientError) as e:
-                print(f"[RETRY {attempt}] {url} -> {e}")
+                logger.warning(f"RETRY {attempt}: {url} -> {e}")
 
                 if attempt == max_retries:
-                    print(f"[FAILED] {url}")
+                    logger.error(f"FAILED: {url}")
                     return {
                         "url": url,
                         "error": str(e)
