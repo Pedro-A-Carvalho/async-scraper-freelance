@@ -2,6 +2,7 @@ import asyncio
 import aiohttp
 from scraper.fetcher import fetch
 import logging
+import argparse
 
 logging.basicConfig(
     level=logging.INFO,
@@ -12,22 +13,40 @@ logging.basicConfig(
     ]
 )
 
-URLS = [
-    "https://example.com",
-    "https://httpbin.org/delay/2",
-    "https://httpbin.org/status/404",
-]
+BASE_URL = "https://books.toscrape.com/catalogue/page-{}.html"
 
-CONCURRENCY_LIMIT = 3
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Async Web Scraper")
+
+    parser.add_argument(
+        "--pages",
+        type=int,
+        default=3,
+        help="Number of pages to scrape"
+    )
+
+    parser.add_argument(
+        "--concurrency",
+        type=int,
+        default=5,
+        help="Number of concurrent requests"
+    )
+
+    return parser.parse_args()
 
 
 async def run():
-    semaphore = asyncio.Semaphore(CONCURRENCY_LIMIT)
+    args = parse_args()
+
+    pages = args.pages
+    concurrency = args.concurrency
+    semaphore = asyncio.Semaphore(concurrency)
 
     async with aiohttp.ClientSession() as session:
         tasks = [
-            fetch(session, url, semaphore)
-            for url in URLS
+            fetch(session, BASE_URL.format(page), semaphore)
+            for page in range(1, pages + 1)
         ]
 
         results = await asyncio.gather(*tasks)
