@@ -3,6 +3,7 @@ import aiohttp
 from scraper.fetcher import fetch
 import logging
 import argparse
+from scraper.exporter import export_to_json
 
 logging.basicConfig(
     level=logging.INFO,
@@ -12,6 +13,8 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
+
+logger = logging.getLogger(__name__)
 
 BASE_URL = "https://books.toscrape.com/catalogue/page-{}.html"
 
@@ -51,9 +54,8 @@ async def run():
 
         results = await asyncio.gather(*tasks)
 
-    print("\nFinal Results:")
-    for result in results:
-        print(result)
+    logger.info(f"SAVED IN JSON")
+    export_to_json(results)
 
 
 if __name__ == "__main__":

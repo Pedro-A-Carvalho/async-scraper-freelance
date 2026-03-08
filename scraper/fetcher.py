@@ -3,15 +3,13 @@ import asyncio
 from scraper.parser import parse_title
 import random
 import logging
+from scraper.config import MAX_RETRIES, BASE_DELAY, DEFAULT_TIMEOUT
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_TIMEOUT = 10
-
-
 async def fetch(session: aiohttp.ClientSession, url: str, semaphore: asyncio.Semaphore):
-    max_retries = 3
-    base_delay = 1
+    max_retries = MAX_RETRIES
+    base_delay = BASE_DELAY
 
     async with semaphore:
         for attempt in range(1, max_retries + 1):
