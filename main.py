@@ -4,6 +4,7 @@ from scraper.fetcher import fetch
 import logging
 import argparse
 from scraper.exporter import export_to_json
+from scraper.input_reader import load_urls
 
 logging.basicConfig(
     level=logging.INFO,
@@ -25,7 +26,7 @@ def parse_args():
     parser.add_argument(
         "--pages",
         type=int,
-        default=3,
+        default=1,
         help="Number of pages to scrape"
     )
 
@@ -42,14 +43,15 @@ def parse_args():
 async def run():
     args = parse_args()
 
-    pages = args.pages
+    urls = load_urls("urls.txt")
     concurrency = args.concurrency
+
     semaphore = asyncio.Semaphore(concurrency)
 
     async with aiohttp.ClientSession() as session:
         tasks = [
-            fetch(session, BASE_URL.format(page), semaphore)
-            for page in range(1, pages + 1)
+            fetch(session, url, semaphore)
+            for url in urls
         ]
 
         results = await asyncio.gather(*tasks)
