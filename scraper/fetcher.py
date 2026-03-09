@@ -1,6 +1,6 @@
 import aiohttp
 import asyncio
-from scraper.parser import parse_title
+from scraper.parser import parse_title, parse_books
 import random
 import logging
 from scraper.config import MAX_RETRIES, BASE_DELAY, DEFAULT_TIMEOUT
@@ -18,7 +18,7 @@ async def fetch(session: aiohttp.ClientSession, url: str, semaphore: asyncio.Sem
                     response.raise_for_status()
                     html = await response.text()
 
-                    parsed_data = parse_title(html)
+                    parsed_data = parse_books(html)
 
                     logger.info(f"SUCCESS: {url}")
                     return {

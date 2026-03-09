@@ -3,4 +3,4 @@ MAX_RETRIES = 3
 BASE_DELAY = 1
 CONCURRENCY_LIMIT = 5
 
-OUTPUT_FILE = "output.json"
+OUTPUT_FILE = "output"

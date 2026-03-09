@@ -3,7 +3,7 @@ import aiohttp
 from scraper.fetcher import fetch
 import logging
 import argparse
-from scraper.exporter import export_to_json
+from scraper.exporter import export_to_json, export_to_csv
 from scraper.input_reader import load_urls
 
 logging.basicConfig(
@@ -56,8 +56,8 @@ async def run():
 
         results = await asyncio.gather(*tasks)
 
-    logger.info(f"SAVED IN JSON")
-    export_to_json(results)
+    logger.info(f"SAVED")
+    export_to_csv(results)
 
 
 if __name__ == "__main__":
