@@ -5,6 +5,7 @@ import logging
 import argparse
 from scraper.exporter import export_to_json, export_to_csv
 from scraper.input_reader import load_urls
+from tqdm import tqdm
 
 logging.basicConfig(
     level=logging.INFO,
@@ -51,7 +52,7 @@ async def run():
     async with aiohttp.ClientSession() as session:
         tasks = [
             fetch(session, url, semaphore)
-            for url in urls
+            for url in tqdm(urls, desc="Scraping pages")
         ]
 
         results = await asyncio.gather(*tasks)
