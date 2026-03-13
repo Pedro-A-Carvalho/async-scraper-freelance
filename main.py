@@ -49,6 +49,8 @@ async def run():
 
     semaphore = asyncio.Semaphore(concurrency)
 
+    failed_urls = []
+
     async with aiohttp.ClientSession() as session:
         tasks = [
             fetch(session, url, semaphore)
@@ -57,9 +59,23 @@ async def run():
 
         results = await asyncio.gather(*tasks)
 
+    for result in results:
+
+        if result is None:
+            continue
+
+        if not result.get("data"):
+            failed_urls.append(result["url"])
+
     logger.info(f"SAVED")
     export_to_csv(results)
     export_to_json(results)
+
+    if failed_urls:
+
+        with open("failed_urls.txt", "w") as f:
+            for url in failed_urls:
+                f.write(url + "\n")
 
 
 if __name__ == "__main__":

@@ -39,3 +39,9 @@
 2026-03-13 01:10:33,150 - INFO - SUCCESS: https://books.toscrape.com/catalogue/page-2.html
 2026-03-13 01:10:33,534 - INFO - SUCCESS: https://books.toscrape.com/catalogue/page-5.html
 2026-03-13 01:10:33,535 - INFO - SAVED
+2026-03-13 01:14:10,780 - INFO - SUCCESS: https://books.toscrape.com/catalogue/page-5.html
+2026-03-13 01:14:10,795 - INFO - SUCCESS: https://books.toscrape.com/catalogue/page-2.html
+2026-03-13 01:14:10,810 - INFO - SUCCESS: https://books.toscrape.com/catalogue/page-1.html
+2026-03-13 01:14:04,652 - INFO - SUCCESS: https://books.toscrape.com/catalogue/page-4.html
+2026-03-13 01:14:05,087 - INFO - SUCCESS: https://books.toscrape.com/catalogue/page-3.html
+2026-03-13 01:14:05,088 - INFO - SAVED
