@@ -59,6 +59,7 @@ async def run():
 
     logger.info(f"SAVED")
     export_to_csv(results)
+    export_to_json(results)
 
 
 if __name__ == "__main__":

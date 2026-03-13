@@ -22,6 +22,19 @@ def export_to_csv(results: list, filename=OUTPUT_FILE +".csv"):
                 ])
 
 
-def export_to_json(data, filename=OUTPUT_FILE+".json"):
+def export_to_json(results: list, filename=OUTPUT_FILE+".json"):
+    rows = []
+
+    for result in results:
+        books = result.get("data", [])
+
+        for book in books:
+            rows.append({
+                "url": result["url"],
+                "title": book["title"],
+                "price": book["price"],
+                "rating": book["rating"]
+            })
+
     with open(filename, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4, ensure_ascii=False)
+        json.dump(rows, f, indent=2, ensure_ascii=False)
