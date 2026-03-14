@@ -1,11 +1,12 @@
 import asyncio
 import aiohttp
-from scraper.fetcher import fetch
+from scraper.fetcher import fetch, fetch_html
 import logging
 import argparse
 from scraper.exporter import export_to_json, export_to_csv
 from scraper.input_reader import load_urls
 from tqdm import tqdm
+from scraper.pagination import get_total_pages
 
 logging.basicConfig(
     level=logging.INFO,
@@ -19,6 +20,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 BASE_URL = "https://books.toscrape.com/catalogue/page-{}.html"
+
+
 
 
 def parse_args():
@@ -44,7 +47,8 @@ def parse_args():
 async def run():
     args = parse_args()
 
-    urls = load_urls("urls.txt")
+    # urls = load_urls("urls.txt")
+
     concurrency = args.concurrency
 
     semaphore = asyncio.Semaphore(concurrency)
@@ -52,6 +56,12 @@ async def run():
     failed_urls = []
 
     async with aiohttp.ClientSession() as session:
+        first_html = await fetch_html(session, BASE_URL.format(1),semaphore)
+        total_pages = get_total_pages(first_html)
+        urls = [
+        BASE_URL.format(i)
+        for i in range(1, total_pages + 1)
+        ]
         tasks = [
             fetch(session, url, semaphore)
             for url in tqdm(urls, desc="Scraping pages")

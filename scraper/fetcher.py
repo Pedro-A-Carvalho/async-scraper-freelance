@@ -46,3 +46,9 @@ async def fetch(session: aiohttp.ClientSession, url: str, semaphore: asyncio.Sem
                 delay = base_delay * (2 ** (attempt - 1))
                 jitter = random.uniform(0, 0.5)
                 await asyncio.sleep(delay + jitter)
+
+async def fetch_html(session, url, semaphore):
+    async with semaphore:
+        async with session.get(url) as response:
+            response.raise_for_status()
+            return await response.text()
