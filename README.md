@@ -42,29 +42,29 @@ For each book the scraper extracts:
 ---
 
 ## Project Structure
-
-async-scraper-freelance/
-│
-├── scraper/
-│   ├── config.py
-│   ├── fetcher.py
-│   ├── parser.py
-│   ├── exporter.py
-│   ├── pagination.py
-│   └── input_reader.py
-│
-├── main.py
-├── urls.txt
-├── requirements.txt
-└── README.md
-
+```
+ async-scraper-freelance/
+ │
+ ├── scraper/
+ │   ├── config.py
+ │   ├── fetcher.py
+ │   ├── parser.py
+ │   ├── exporter.py
+ │   ├── pagination.py
+ │   └── input_reader.py
+ │
+ ├── main.py
+ ├── urls.txt
+ ├── requirements.txt
+ └── README.md
+```
 ---
 
 ## Installation
 
 Clone the repository:
 
-git clone https://github.com/YOUR_USERNAME/async-scraper-freelance.git
+git clone https://github.com/Pedro-A-Carvalho/async-scraper-freelance
 
 cd async-scraper-freelance
 
