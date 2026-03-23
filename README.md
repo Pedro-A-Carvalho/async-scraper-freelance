@@ -110,11 +110,11 @@ output.csv
 output.json
 
 Example CSV output:
-
+```
 url,title,price,rating
 page1,A Light in the Attic,£51.77,Three
 page1,Tipping the Velvet,£53.74,One
-
+```
 ---
 
 ## Technologies Used
